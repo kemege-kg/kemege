@@ -1,0 +1,389 @@
+```html
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KEMEGE — Адал Рестораны | Меню и Бронирование</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            stoneBg: '#F4EFE6',
+            creamSurface: '#FAF7F2',
+            espresso: '#231C16',
+            charcoal: '#2E261F',
+            goldAccent: '#C59638',
+            goldDark: '#9E7322',
+            oliveBadge: '#3E563C',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Cormorant Garamond', 'serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Текстура натурального камня/травертина в стиле обложки KEMEGE */
+    .travertine-bg {
+      background-color: #F4EFE6;
+      background-image:
+        radial-gradient(rgba(46, 38, 31, 0.04) 1px, transparent 0),
+        radial-gradient(rgba(197, 150, 56, 0.05) 1px, transparent 0);
+      background-size: 28px 28px;
+      background-position: 0 0, 14px 14px;
+    }
+
+    /* Эффект движущихся картин (Ken Burns Effect) */
+    @keyframes kenBurnsSlow {
+      0% {
+        transform: scale(1) translate3d(0, 0, 0);
+      }
+      50% {
+        transform: scale(1.12) translate3d(-1.5%, -1%, 0);
+      }
+      100% {
+        transform: scale(1) translate3d(0, 0, 0);
+      }
+    }
+
+    @keyframes kenBurnsAlt {
+      0% {
+        transform: scale(1.08) translate3d(1%, 0.5%, 0);
+      }
+      50% {
+        transform: scale(1) translate3d(-1%, -0.5%, 0);
+      }
+      100% {
+        transform: scale(1.08) translate3d(1%, 0.5%, 0);
+      }
+    }
+
+    .animate-ken-burns {
+      animation: kenBurnsSlow 22s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .animate-ken-burns-alt {
+      animation: kenBurnsAlt 18s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    /* Бесконечная плавная лента движущихся картин */
+    @keyframes marqueeScroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marqueeScroll 45s linear infinite;
+    }
+
+    .marquee-wrapper:hover .marquee-track {
+      animation-play-state: paused;
+    }
+
+    /* Плавное парение частиц/бликов */
+    @keyframes floatParticle {
+      0%, 100% {
+        transform: translateY(0px) translateX(0px);
+        opacity: 0.35;
+      }
+      50% {
+        transform: translateY(-22px) translateX(10px);
+        opacity: 0.85;
+      }
+    }
+
+    .ember-dot {
+      animation: floatParticle 6s ease-in-out infinite;
+    }
+
+    /* Скрытие полосы прокрутки для навигации категорий */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Стиль резного логотипа KEMEGE */
+    .carved-logo {
+      letter-spacing: 0.14em;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+    }
+  </style>
+</head>
+<body class="travertine-bg text-espresso font-sans antialiased overflow-x-hidden selection:bg-goldAccent selection:text-white">
+
+  <!-- ВЕРХНЯЯ НАВИГАЦИЯ -->
+  <header class="sticky top-0 inset-x-0 z-50 bg-espresso/95 backdrop-blur-md text-creamSurface border-b border-goldAccent/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2">
+      <!-- Логотип -->
+      <a href="#top" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-goldAccent to-goldDark flex items-center justify-center text-espresso font-serif font-bold text-lg sm:text-xl shadow-md group-hover:scale-105 transition-transform">
+          K
+        </div>
+        <div>
+          <span class="block font-serif font-bold text-lg sm:text-2xl tracking-widest text-white leading-none">KEMEGE</span>
+          <span class="block text-[9px] sm:text-xs uppercase tracking-[0.2em] text-goldAccent font-medium mt-0.5" data-i18n="brandSubtitle">адал рестораны</span>
+        </div>
+      </a>
+
+      <!-- Навигация (десктоп) -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-stone-200">
+        <a href="#about" class="hover:text-goldAccent transition-colors" data-i18n="navAbout">О ресторане</a>
+        <a href="#moving-gallery" class="hover:text-goldAccent transition-colors" data-i18n="navAtmosphere">Атмосфера</a>
+        <a href="#menu" class="hover:text-goldAccent transition-colors" data-i18n="navMenu">Меню</a>
+        <a href="#booking" class="hover:text-goldAccent transition-colors" data-i18n="navBooking">Бронь стола</a>
+        <a href="#contacts" class="hover:text-goldAccent transition-colors" data-i18n="navContacts">Контакты</a>
+      </nav>
+
+      <!-- Переключатель языков и Корзина -->
+      <div class="flex items-center gap-1.5 sm:gap-3">
+        <!-- Переключатель RU / KG / EN -->
+        <div class="flex items-center bg-charcoal/90 rounded-full p-0.5 sm:p-1 border border-goldAccent/30" role="group" aria-label="Language switcher">
+          <button onclick="setLanguage('ru')" id="lang-ru" class="lang-btn px-2 sm:px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold transition-all bg-goldAccent text-espresso">RU</button>
+          <button onclick="setLanguage('kg')" id="lang-kg" class="lang-btn px-2 sm:px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold transition-all text-stone-300 hover:text-white">KG</button>
+          <button onclick="setLanguage('en')" id="lang-en" class="lang-btn px-2 sm:px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold transition-all text-stone-300 hover:text-white">EN</button>
+        </div>
+
+        <!-- Кнопка корзины -->
+        <button onclick="toggleCartModal()" class="relative flex items-center gap-1.5 sm:gap-2 bg-goldAccent hover:bg-amber-500 text-espresso font-semibold px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm shadow-lg transition-transform active:scale-95">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+          <span class="hidden sm:inline" data-i18n="cartBtn">Заказ</span>
+          <span id="cart-badge" class="bg-espresso text-goldAccent text-[11px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ГЛАВНЫЙ ЭКРАН (HERO) С ДВИЖУЩИМИСЯ КАРТИНАМИ -->
+    <section id="top" class="relative flex items-center justify-center overflow-hidden bg-espresso py-14 sm:py-24">
+      <!-- Слайдер движущихся фоновых картин (Ken Burns) -->
+      <div id="hero-slides" class="absolute inset-0 z-0">
+        <div class="hero-slide absolute inset-0 transition-opacity duration-1000 opacity-100">
+          <img
+            src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1600&q=80"
+            onerror="this.src='https://placehold.co/1600x900/231C16/C59638?text=KEMEGE+HALAL+RESTAURANT'"
+            alt="KEMEGE Стейки и блюда на огне"
+            class="w-full h-full object-cover animate-ken-burns opacity-55"
+          />
+        </div>
+        <div class="hero-slide absolute inset-0 transition-opacity duration-1000 opacity-0">
+          <img
+            src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1600&q=80"
+            onerror="this.src='https://placehold.co/1600x900/2E261F/C59638?text=KEMEGE+INTERIOR'"
+            alt="Атмосфера ресторана KEMEGE"
+            class="w-full h-full object-cover animate-ken-burns-alt opacity-55"
+          />
+        </div>
+        <div class="hero-slide absolute inset-0 transition-opacity duration-1000 opacity-0">
+          <img
+            src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1600&q=80"
+            onerror="this.src='https://placehold.co/1600x900/231C16/C59638?text=KEMEGE+CUISINE'"
+            alt="Авторская кухня KEMEGE"
+            class="w-full h-full object-cover animate-ken-burns opacity-55"
+          />
+        </div>
+      </div>
+
+      <!-- Градиентная вуаль -->
+      <div class="absolute inset-0 bg-gradient-to-b from-espresso/85 via-espresso/65 to-espresso z-10"></div>
+
+      <!-- Парящие золотистые огоньки -->
+      <div class="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+        <span class="ember-dot absolute top-1/4 left-1/5 w-2 h-2 rounded-full bg-goldAccent/60 blur-[1px]" style="animation-delay: 0s;"></span>
+        <span class="ember-dot absolute top-2/3 left-1/3 w-1.5 h-1.5 rounded-full bg-amber-300/50 blur-[1px]" style="animation-delay: 1.8s;"></span>
+        <span class="ember-dot absolute top-1/3 right-1/4 w-2.5 h-2.5 rounded-full bg-goldAccent/50 blur-[2px]" style="animation-delay: 3.1s;"></span>
+      </div>
+
+      <!-- Контент Hero -->
+      <div class="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 text-center text-creamSurface">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-oliveBadge/90 border border-emerald-400/30 text-emerald-100 text-xs font-semibold tracking-wider uppercase mb-5 shadow-lg">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>100% АДАЛ / HALAL • БИШКЕК</span>
+        </div>
+
+        <h1 class="font-serif font-bold text-5xl sm:text-7xl md:text-8xl text-white carved-logo mb-3">
+          KEMEGE
+        </h1>
+        <p class="font-serif italic text-xl sm:text-3xl text-goldAccent mb-5" data-i18n="heroTagline">
+          Тепло семейного очага, традиции и высокая авторская кухня
+        </p>
+
+        <p class="max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-stone-200 leading-relaxed mb-7" data-i18n="heroDesc">
+          Уютный семейный ресторан на проспекте Аалы Токомбаева, 21Б/5. От нежных утренних завтраков с 08:00 до сочных мраморных стейков на открытом огне и национальных деликатесов.
+        </p>
+
+        <!-- Кнопки действий -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-8">
+          <a href="#menu" class="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-goldAccent hover:bg-amber-500 text-espresso font-bold text-sm sm:text-base shadow-xl shadow-goldAccent/20 transition-all">
+            <span data-i18n="btnExploreMenu">Открыть полное меню</span>
+          </a>
+          <a href="#booking" class="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/25 font-semibold text-sm sm:text-base transition-all">
+            <span data-i18n="btnBookTable">Забронировать столик</span>
+          </a>
+        </div>
+
+        <!-- Быстрая плашка адреса и WhatsApp -->
+        <div class="inline-flex flex-wrap items-center justify-center gap-3 sm:gap-6 px-5 py-3 rounded-2xl bg-charcoal/90 backdrop-blur-md border border-goldAccent/25 text-xs sm:text-sm text-stone-200">
+          <a href="#contacts" class="flex items-center gap-1.5 hover:text-goldAccent transition-colors">
+            <svg class="w-4 h-4 text-goldAccent shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span data-i18n="shortAddress">пр. Аалы Токомбаева, 21Б/5, 1 этаж</span>
+          </a>
+          <span class="hidden sm:inline text-goldAccent/40">|</span>
+          <a href="https://wa.me/996503000073" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+            <span>WhatsApp: +996 503 00 00 73</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- БЛОК ДУА И ФИЛОСОФИЯ ГОСТЕПРИИМСТВА -->
+    <section id="about" class="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+        <!-- Карточка с молитвой перед едой (Дуа) -->
+        <div class="lg:col-span-5">
+          <div class="bg-espresso text-creamSurface rounded-3xl p-6 sm:p-8 shadow-xl border border-goldAccent/30 relative overflow-hidden">
+            <span class="inline-block text-xs uppercase tracking-[0.2em] text-goldAccent font-semibold mb-3" data-i18n="duaHeader">
+              Дуа перед трапезой
+            </span>
+            <p class="text-right font-serif text-2xl sm:text-3xl text-goldAccent leading-relaxed mb-3" dir="rtl">
+              بِسْمِ اللَّهِ وَعَلَى بَرَكَةِ اللَّهِ
+            </p>
+            <p class="text-sm sm:text-base font-semibold text-white tracking-wide mb-2">
+              БИСМИЛЛАХИ УА АЛАА БАРАКАТИЛЛАХИ
+            </p>
+            <p class="text-xs sm:text-sm text-stone-300 leading-relaxed mb-4" data-i18n="duaMeaning">
+              «С именем Аллаха и с благословением Аллаха начинаю». Если забыли прочитать в начале: «Бисмиллахи ауалаху уа аахироху».
+            </p>
+            <div class="pt-3 border-t border-white/10 flex items-center justify-between text-xs text-stone-400">
+              <span>KEMEGE ADAL RESTORANY</span>
+              <span class="text-goldAccent font-medium">★ 100% HALAL</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Приветственное слово ресторана -->
+        <div class="lg:col-span-7">
+          <div class="bg-creamSurface rounded-3xl p-6 sm:p-9 shadow-lg border border-stone-200/80">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="w-8 h-[2px] bg-goldAccent"></span>
+              <span class="text-xs uppercase tracking-[0.22em] text-goldDark font-bold" data-i18n="welcomeBadge">Добро пожаловать</span>
+            </div>
+            <h2 class="font-serif font-bold text-2xl sm:text-4xl text-espresso mb-4" data-i18n="welcomeTitle">
+              Добро пожаловать в «КЕМЕГЕ»!
+            </h2>
+            <p class="text-stone-700 text-sm sm:text-base leading-relaxed mb-4" data-i18n="welcomeText1">
+              Здесь мы верим, что хорошая еда — это не только вкус. Это повод собраться за одним столом, провести время с близкими и разделить тёплые моменты.
+            </p>
+            <p class="text-stone-600 text-xs sm:text-sm leading-relaxed mb-6" data-i18n="welcomeText2">
+              Мы готовим для вас с заботой, бережно сохраняя знакомые национальные вкусы и добавляя к ним авторские кулинарные шедевры. Спасибо, что сегодня вы с нами. Приятного аппетита!
+            </p>
+
+            <!-- 3 ключевых преимущества -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-stone-200">
+              <div class="p-3 rounded-2xl bg-stoneBg/80">
+                <div class="text-goldDark font-serif font-bold text-xl mb-0.5">08:00 – 15:00</div>
+                <div class="text-xs text-stone-600 font-medium" data-i18n="featBreakfast">Утренние завтраки каждый день</div>
+              </div>
+              <div class="p-3 rounded-2xl bg-stoneBg/80">
+                <div class="text-goldDark font-serif font-bold text-xl mb-0.5">100+ блюд</div>
+                <div class="text-xs text-stone-600 font-medium" data-i18n="featDishes">От стейков до авторских десертов</div>
+              </div>
+              <div class="p-3 rounded-2xl bg-stoneBg/80">
+                <div class="text-goldDark font-serif font-bold text-xl mb-0.5">Адал / Halal</div>
+                <div class="text-xs text-stone-600 font-medium" data-i18n="featHalal">Строгий контроль качества и свежести</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ЖИВАЯ ГАЛЕРЕЯ «ДВИЖУЩИЕСЯ КАРТИНЫ» -->
+    <section id="moving-gallery" class="py-12 bg-espresso text-creamSurface overflow-hidden border-y border-goldAccent/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+        <div>
+          <span class="text-xs uppercase tracking-[0.25em] text-goldAccent font-semibold block mb-1.5" data-i18n="gallerySub">Живая витрина вкусов</span>
+          <h2 class="font-serif font-bold text-2xl sm:text-4xl text-white" data-i18n="galleryTitle">Движущиеся картины кухни KEMEGE</h2>
+        </div>
+        <p class="text-xs sm:text-sm text-stone-300 max-w-md" data-i18n="galleryHint">
+          Нажмите на любую карточку, чтобы перейти к выбору блюд в меню.
+        </p>
+      </div>
+
+      <!-- Бесконечная движущаяся лента фотографий -->
+      <div class="marquee-wrapper w-full overflow-hidden py-1">
+        <div class="marquee-track gap-4 px-3" id="marquee-cards">
+          <!-- Карточки генерируются через JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ПОЛНОЕ ИНТЕРАКТИВНОЕ МЕНЮ РЕСТОРАНА -->
+    <section id="menu" class="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-8">
+        <span class="text-xs uppercase tracking-[0.25em] text-goldDark font-bold block mb-1.5" data-i18n="menuKicker">Полный каталог блюд</span>
+        <h2 class="font-serif font-bold text-3xl sm:text-5xl text-espresso mb-3" data-i18n="menuTitle">Меню ресторана KEMEGE</h2>
+        <p class="text-stone-600 text-xs sm:text-base" data-i18n="menuSubtitle">
+          Нажмите на фото любого блюда, чтобы рассмотреть его крупным планом, или добавьте в корзину для заказа в WhatsApp.
+        </p>
+      </div>
+
+      <!-- Поиск и Фильтр -->
+      <div class="sticky top-16 sm:top-20 z-30 bg-stoneBg/95 backdrop-blur-md py-3 mb-7 border-b border-stone-300/70 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div class="flex flex-col md:flex-row gap-2.5 items-stretch md:items-center justify-between mb-3">
+          <!-- Поле поиска -->
+          <div class="relative flex-1 max-w-md">
+            <svg class="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="text"
+              id="menu-search"
+              oninput="filterMenu()"
+              placeholder="Поиск блюда (например: Рибай, Шакшука, Чучук, Том Ям)..."
+              class="w-full pl-10 pr-4 py-2 rounded-2xl bg-creamSurface border border-stone-300 text-xs sm:text-sm text-espresso placeholder-stone-400 focus:outline-none focus:border-goldAccent"
+            />
+          </div>
+
+          <!-- Инфо о завтраках -->
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-100/90 border border-amber-300/60 text-amber-900 text-xs font-medium">
+            <span>☀️</span>
+            <span data-i18n="breakfastHoursBadge">Завтраки подаются с 08:00 до 15:00</span>
+          </div>
+        </div>
+
+        <!-- Горизонтальная лента категорий -->
+        <div id="category-tabs" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+          <!-- Вкладки категорий рендерятся через JS -->
+        </div>
+      </div>
+
+      <!-- Контейнер категорий и карточек блюд -->
+      <div id="menu-container" class="space-y-12">
+        <!-- Разделы меню рендерятся чере
